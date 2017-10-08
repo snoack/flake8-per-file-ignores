@@ -9,7 +9,7 @@ setup(
     author_email='sebastian.noack@gmail.com',
     py_modules=['flake8_per_file_ignores'],
     install_requires=[
-        'flake8>=3.2.1',
+        'flake8>=3',
     ],
     entry_points={
         'flake8.extension': [

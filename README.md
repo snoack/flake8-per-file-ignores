@@ -28,14 +28,14 @@ considered by flake8][6]:
       [...]
 
 * `filename` must be the normalized path, relative to the the directory
-  `flake8` is running from.
-* `error` has the same semantics as the [`--ignore` command line option][7].
+  `flake8` is running from. You can also use a [glob pattern][7].
+* `error` has the same semantics as the [`--ignore` command line option][8].
 
 If an error to be ignored, no longer occurs for a given file, this will
-cause an `X100` error, in order to make you to progressively reduce the number
+cause an `X100` error, in order to make you progressively reduce the number
 of ignores as legacy code gets rewritten or removed.
 
-For an example see the [`test` folder][8].
+For an example see the [`test` folder][9].
 
 [1]: https://travis-ci.org/snoack/flake8-per-file-ignores.svg?branch=master
 [2]: https://travis-ci.org/snoack/flake8-per-file-ignores
@@ -43,5 +43,6 @@ For an example see the [`test` folder][8].
 [4]: https://pypi.python.org/pypi/flake8-per-file-ignores
 [5]: https://gitlab.com/pycqa/flake8
 [6]: http://flake8.pycqa.org/en/latest/user/configuration.html#configuration-locations
-[7]: http://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-ignore
-[8]: https://github.com/snoack/flake8-per-file-ignores/tree/master/test
+[7]: https://en.wikipedia.org/wiki/Glob_(programming)
+[8]: http://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-ignore
+[9]: https://github.com/snoack/flake8-per-file-ignores/tree/master/test

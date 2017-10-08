@@ -1,33 +1,41 @@
 import os
+import re
+import fnmatch
+
 import pkg_resources
 
 
 def patch_flake8(spec):
     from flake8.checker import Manager
-    orig_handle_results = Manager._handle_results
+    orig_run = Manager.run
 
-    def _handle_results(self, filename, results):
-        final_results = []
-        ignores = spec.get(os.path.normpath(filename)) or set()
-        ignored = set()
+    def run(self):
+        orig_run(self)
 
-        for result in results:
-            for code in ignores:
-                if result[0].startswith(code):
-                    ignored.add(code)
-                    break
-            else:
-                final_results.append(result)
+        for pattern, ignores in spec:
+            ignored = set()
+            checkers = []
+            for checker in self.checkers:
+                if pattern.match(os.path.normpath(checker.display_name)):
+                    results = []
+                    for result in checker.results:
+                        for code in ignores:
+                            if result[0].startswith(code):
+                                ignored.add(code)
+                                break
+                        else:
+                            results.append(result)
+                    checker.results = results
+                    checkers.append(checker)
 
-        redundant = ignores - ignored
-        if redundant:
-            text = ('Superfluous per-file-ignores for ' +
-                    ','.join(sorted(redundant)))
-            final_results.append(('X100', 0, 0, text, ''))
+            redundant = ignores - ignored
+            if redundant:
+                text = ('Superfluous per-file-ignores for ' +
+                        ','.join(sorted(redundant)))
+                for checker in checkers:
+                    checker.report('X100', 0, 0, text)
 
-        return orig_handle_results(self, filename, final_results)
-
-    Manager._handle_results = _handle_results
+    Manager.run = run
 
 
 class PerFileIgnores:
@@ -47,12 +55,14 @@ class PerFileIgnores:
 
     @classmethod
     def parse_options(cls, options):
-        spec = {}
+        spec = []
         if options.per_file_ignores:
             for line in options.per_file_ignores.splitlines():
                 if ':' in line:
                     filename, ignores = line.rsplit(':', 1)
-                    spec[filename.strip()] = \
+                    spec.append((
+                        re.compile(fnmatch.translate(filename.strip())),
                         {x.strip() for x in ignores.split(',')} - {''}
+                    ))
         if spec:
             patch_flake8(spec)
