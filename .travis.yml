@@ -8,12 +8,15 @@ python:
   - "3.5"
   - "3.6"
 
+matrix:
+  include:
+    - env: TOXENV=flake8
+
 install:
   - pip install tox-travis
 
 script:
   - tox
-  - tox -e flake8
 
 notifications:
   email: false
