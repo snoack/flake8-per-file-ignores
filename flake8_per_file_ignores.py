@@ -4,6 +4,8 @@ import fnmatch
 
 import pkg_resources
 
+ERROR_CODE = 'X100'
+
 
 def patch_flake8(spec):
     from flake8.checker import Manager
@@ -29,11 +31,11 @@ def patch_flake8(spec):
                     checkers.append(checker)
 
             redundant = ignores - ignored
-            if redundant:
+            if redundant and ERROR_CODE not in ignores:
                 text = ('Superfluous per-file-ignores for ' +
                         ','.join(sorted(redundant)))
                 for checker in checkers:
-                    checker.report('X100', 0, 0, text)
+                    checker.report(ERROR_CODE, 0, 0, text)
 
     Manager.run = run
 
@@ -51,7 +53,7 @@ class PerFileIgnores:
     @classmethod
     def add_options(cls, parser):
         parser.add_option('--per-file-ignores', parse_from_config=True)
-        parser.extend_default_select(['X100'])
+        parser.extend_default_select([ERROR_CODE])
 
     @classmethod
     def parse_options(cls, options):
