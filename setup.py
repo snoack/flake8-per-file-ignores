@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='flake8-per-file-ignores',
-    version='0.3',
+    version='0.4',
     url='https://github.com/snoack/flake8-per-file-ignores',
     description='Ignore individual error codes per file with flake8',
     author='Sebastian Noack',
