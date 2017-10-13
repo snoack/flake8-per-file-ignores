@@ -82,8 +82,9 @@ class PerFileIgnores:
             for line in options.per_file_ignores.splitlines():
                 if ':' in line:
                     filename, ignores = line.rsplit(':', 1)
+                    filename = os.path.join(*filename.strip().split('/'))
                     spec.append((
-                        re.compile(fnmatch.translate(filename.strip())),
+                        re.compile(fnmatch.translate(filename)),
                         {x.strip() for x in ignores.split(',')} - {''}
                     ))
         if spec:
