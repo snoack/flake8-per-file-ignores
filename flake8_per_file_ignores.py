@@ -32,7 +32,7 @@ def patch_flake8(spec):
         orig_run(self)
 
         for pattern, ignores in spec:
-            redundant = ignores.copy()
+            redundant = set(ignores)
             checkers = []
             for checker in self.checkers:
                 filename = checker.display_name
@@ -85,7 +85,7 @@ class PerFileIgnores:
                     filename = os.path.join(*filename.strip().split('/'))
                     spec.append((
                         re.compile(fnmatch.translate(filename)),
-                        {x.strip() for x in ignores.split(',')} - {''}
+                        sorted({x.strip() for x in ignores.split(',')} - {''})
                     ))
         if spec:
             patch_flake8(spec)
