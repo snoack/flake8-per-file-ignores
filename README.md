@@ -27,8 +27,9 @@ considered by flake8][6]:
       <filename>: <error>[,<error>[,...]]
       [...]
 
-* `filename` must be the normalized path, relative to the the directory
-  `flake8` is running from. You can also use a [glob pattern][7].
+* `filename` is a [glob pattern][7] matching the filename of the script.
+  If it starts with a slash, it must be a path relative to the directory,
+  flake8 is running from.
 * `error` has the same semantics as the [`--ignore` command line option][8].
 
 If an error to be ignored, no longer occurs for a given file, this will

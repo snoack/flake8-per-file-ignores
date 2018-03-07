@@ -82,10 +82,20 @@ class PerFileIgnores:
             for line in options.per_file_ignores.splitlines():
                 if ':' in line:
                     filename, ignores = line.rsplit(':', 1)
-                    filename = os.path.join(*filename.strip().split('/'))
+                    filename = filename.strip()
+
+                    regexp = fnmatch.translate(
+                        os.path.join(*filename.split('/'))
+                    )
+                    if not filename.startswith('/'):
+                        regexp = r'(?:.*{})?{}'.format(
+                            re.escape(os.path.sep), regexp
+                        )
+
                     spec.append((
-                        re.compile(fnmatch.translate(filename)),
+                        re.compile(regexp),
                         sorted({x.strip() for x in ignores.split(',')} - {''})
                     ))
+
         if spec:
             patch_flake8(spec)
