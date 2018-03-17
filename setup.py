@@ -10,6 +10,7 @@ setup(
     py_modules=['flake8_per_file_ignores'],
     install_requires=[
         'flake8>=3',
+        'pathmatch'
     ],
     entry_points={
         'flake8.extension': [

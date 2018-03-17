@@ -1,8 +1,8 @@
 import os
-import re
-import fnmatch
+import posixpath
 
 import pkg_resources
+import pathmatch.wildmatch
 
 try:
     from flake8.style_guide import Violation
@@ -13,9 +13,10 @@ except ImportError:
 ERROR_CODE = 'X100'
 
 
-def is_inline_ignored(style_guide, filename, result):
+def is_inline_ignored(style_guide, checker, result):
     code, lineno, colno, text, line = result
-    error = Violation(code, filename, lineno, (colno or 0) + 1, text, line)
+    error = Violation(code, checker.display_name,
+                      lineno, (colno or 0) + 1, text, line)
 
     if hasattr(error, 'is_inline_ignored'):
         return error.is_inline_ignored(style_guide.options.disable_noqa)
@@ -31,16 +32,22 @@ def patch_flake8(spec):
     def run(self):
         orig_run(self)
 
+        normalized_paths = [
+            posixpath.normpath(
+                '/' + checker.display_name.replace(os.path.sep, '/')
+            )
+            for checker in self.checkers
+        ]
+
         for pattern, ignores in spec:
             redundant = set(ignores)
             checkers = []
-            for checker in self.checkers:
-                filename = checker.display_name
-                if not pattern.match(os.path.normpath(filename)):
+            for checker, path in zip(self.checkers, normalized_paths):
+                if not pattern.match(path):
                     continue
 
                 for i, result in reversed(list(enumerate(checker.results))):
-                    if is_inline_ignored(self.style_guide, filename, result):
+                    if is_inline_ignored(self.style_guide, checker, result):
                         continue
 
                     for code in ignores:
@@ -82,18 +89,13 @@ class PerFileIgnores:
             for line in options.per_file_ignores.splitlines():
                 if ':' in line:
                     filename, ignores = line.rsplit(':', 1)
-                    filename = filename.strip()
+                    filename = posixpath.normpath(filename.strip())
 
-                    regexp = fnmatch.translate(
-                        os.path.join(*filename.split('/'))
-                    )
                     if not filename.startswith('/'):
-                        regexp = r'(?:.*{})?{}'.format(
-                            re.escape(os.path.sep), regexp
-                        )
+                        filename = '**/' + filename
 
                     spec.append((
-                        re.compile(regexp),
+                        pathmatch.wildmatch.translate(filename),
                         sorted({x.strip() for x in ignores.split(',')} - {''})
                     ))
 
