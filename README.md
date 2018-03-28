@@ -32,9 +32,9 @@ considered by flake8][6]:
   flake8 is running from.
 * `error` has the same semantics as the [`--ignore` command line option][8].
 
-If an error to be ignored, no longer occurs for a given file, this will
-cause an `X100` error, in order to make you progressively reduce the number
-of ignores as legacy code gets rewritten or removed.
+If an ignored error no longer occurs for a given file it will trigger an `X100`
+error to make you progressively reduce the number of ignores as legacy code
+gets rewritten or removed.
 
 For an example see the [`test` folder][9].
 
