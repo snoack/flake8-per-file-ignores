@@ -27,16 +27,18 @@ considered by flake8][6]:
       <filename>: <error>[,<error>[,...]]
       [...]
 
-* `filename` is a [glob pattern][7] matching the filename of the script.
-  If it starts with a slash, it must be a path relative to the directory,
-  flake8 is running from.
-* `error` has the same semantics as the [`--ignore` command line option][8].
+* `filename` is the filename, or if starting with a slash, the full path
+  relative to the directory flake8 is running from, of the script that is
+  subject to the ignores. It can also be a glob pattern, but note (just like
+  with the `glob` module or in UNIX shells), `*` doesn't match accross
+  directory boundaries, however, you can use `**` in order to match recursively.
+* `error` has the same semantics as the [`--ignore` command line option][7].
 
 If an ignored error no longer occurs for a given file it will trigger an `X100`
 error to make you progressively reduce the number of ignores as legacy code
 gets rewritten or removed.
 
-For an example see the [`test` folder][9].
+For an example see the [`test` folder][8].
 
 [1]: https://travis-ci.org/snoack/flake8-per-file-ignores.svg?branch=master
 [2]: https://travis-ci.org/snoack/flake8-per-file-ignores
@@ -44,6 +46,5 @@ For an example see the [`test` folder][9].
 [4]: https://pypi.python.org/pypi/flake8-per-file-ignores
 [5]: https://gitlab.com/pycqa/flake8
 [6]: http://flake8.pycqa.org/en/latest/user/configuration.html#configuration-locations
-[7]: https://en.wikipedia.org/wiki/Glob_(programming)
-[8]: http://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-ignore
-[9]: https://github.com/snoack/flake8-per-file-ignores/tree/master/test
+[7]: http://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-ignore
+[8]: https://github.com/snoack/flake8-per-file-ignores/tree/master/test
