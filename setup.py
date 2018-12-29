@@ -6,7 +6,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as file:
 
 setup(
     name='flake8-per-file-ignores',
-    version='0.6',
+    version='0.7',
     url='https://github.com/snoack/flake8-per-file-ignores',
     description='Ignore individual error codes per file with flake8',
     long_description=long_description,
