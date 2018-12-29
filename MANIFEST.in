@@ -1,2 +1,2 @@
-include LICENSE tox.ini
+include README.md LICENSE tox.ini
 graft test

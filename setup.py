@@ -1,10 +1,16 @@
+import os
 from setuptools import setup
+
+with open(os.path.join(os.path.dirname(__file__), 'README.md')) as file:
+    long_description = file.read()
 
 setup(
     name='flake8-per-file-ignores',
     version='0.6',
     url='https://github.com/snoack/flake8-per-file-ignores',
     description='Ignore individual error codes per file with flake8',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Sebastian Noack',
     author_email='sebastian.noack@gmail.com',
     py_modules=['flake8_per_file_ignores'],
