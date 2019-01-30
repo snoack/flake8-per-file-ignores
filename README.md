@@ -3,6 +3,10 @@
 [![Build Status][1]][2]
 [![Pypi Entry][3]][4]
 
+**This flake8 extension has been discontinued in favour of the
+`per-file-ignores` option built in flake8 3.7.0 an above.
+But be aware that the built-in option uses different syntax.**
+
 An extension for [flake8][5] that lets you configure (out-of-source) individual
 error codes to be ignored per file.
 

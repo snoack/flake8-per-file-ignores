@@ -15,7 +15,7 @@ setup(
     author_email='sebastian.noack@gmail.com',
     py_modules=['flake8_per_file_ignores'],
     install_requires=[
-        'flake8>=3',
+        'flake8>=3,<3.7',
         'pathmatch'
     ],
     entry_points={
