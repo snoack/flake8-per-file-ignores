@@ -4,7 +4,7 @@
 [![Pypi Entry][3]][4]
 
 **This flake8 extension has been discontinued in favour of the
-`per-file-ignores` option built in flake8 3.7.0 an above.
+`per-file-ignores` option built into flake8 3.7.0 and above.
 But be aware that the built-in option uses different syntax.**
 
 An extension for [flake8][5] that lets you configure (out-of-source) individual
